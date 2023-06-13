@@ -7,11 +7,11 @@
     <test name="Kafka Proxy" enabled="true" preserve-order="true">
         <groups>
             <run>
-                <include name="myEntityListeners"/>
+<!--                <include name="myEntityListeners"/>-->
             </run>
         </groups>
         <classes>
-            <class name="com.biit.kafka.core.MyEntityTest"/>
+<!--            <class name="com.biit.kafka.core.MyEntityTest"/>-->
         </classes>
     </test>
 </suite>

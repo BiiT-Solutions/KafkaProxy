@@ -19,7 +19,7 @@
     <dependencies>
         <dependency>
             <groupId>com.biit.kafka</groupId>
-            <artifactId>kafka-proxy-persistence</artifactId>
+            <artifactId>kafka-proxy-logger</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

@@ -15,7 +15,6 @@
 
     <modules>
         <module>kafka-proxy-logger</module>
-        <module>kafka-proxy-persistence</module>
         <module>kafka-proxy-core</module>
         <module>kafka-proxy-rest</module>
     </modules>
