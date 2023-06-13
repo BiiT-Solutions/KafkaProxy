@@ -21,8 +21,8 @@
     </modules>
 
     <scm>
-        <connection>scm:git:git.biit-solutions.com:BiiT/Kafka Proxy.git</connection>
-        <developerConnection>scm:git:git.biit-solutions.com:BiiT/Kafka Proxy.git</developerConnection>
+        <connection>scm:git:git.biit-solutions.com:BiiT/KafkaProxy.git</connection>
+        <developerConnection>scm:git:git.biit-solutions.com:BiiT/KafkaProxy.git</developerConnection>
         <tag>Kafka Proxy</tag>
     </scm>
 
