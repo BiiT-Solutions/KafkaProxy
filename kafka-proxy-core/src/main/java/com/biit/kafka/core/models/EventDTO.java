@@ -31,6 +31,10 @@ public class EventDTO {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime createAt;
 
+    private String createdBy;
+
+    private String payload;
+
     public String getId() {
         return id;
     }
@@ -109,5 +113,21 @@ public class EventDTO {
 
     public void setCreateAt(LocalDateTime createAt) {
         this.createAt = createAt;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public String getPayload() {
+        return payload;
+    }
+
+    public void setPayload(String payload) {
+        this.payload = payload;
     }
 }
