@@ -1,13 +1,15 @@
 package com.biit.kafka.core.models;
 
+import com.biit.server.controllers.models.CreatedElementDTO;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
-public class EventDTO {
+public class EventDTO extends CreatedElementDTO {
 
     private String id;
 
@@ -17,21 +19,15 @@ public class EventDTO {
 
     private String replyTo;
 
-    private String sessionId;
+    private UUID sessionId;
 
-    private String messageId;
+    private UUID messageId;
 
-    private String correlationId;
+    private UUID correlationId;
 
     private String subject;
 
     private String contentType;
-
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    private LocalDateTime createAt;
-
-    private String createdBy;
 
     private String payload;
 
@@ -67,27 +63,27 @@ public class EventDTO {
         this.replyTo = replyTo;
     }
 
-    public String getSessionId() {
+    public UUID getSessionId() {
         return sessionId;
     }
 
-    public void setSessionId(String sessionId) {
+    public void setSessionId(UUID sessionId) {
         this.sessionId = sessionId;
     }
 
-    public String getMessageId() {
+    public UUID getMessageId() {
         return messageId;
     }
 
-    public void setMessageId(String messageId) {
+    public void setMessageId(UUID messageId) {
         this.messageId = messageId;
     }
 
-    public String getCorrelationId() {
+    public UUID getCorrelationId() {
         return correlationId;
     }
 
-    public void setCorrelationId(String correlationId) {
+    public void setCorrelationId(UUID correlationId) {
         this.correlationId = correlationId;
     }
 
@@ -107,20 +103,14 @@ public class EventDTO {
         this.contentType = contentType;
     }
 
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     public LocalDateTime getCreateAt() {
-        return createAt;
+        return super.getCreatedAt();
     }
 
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     public void setCreateAt(LocalDateTime createAt) {
-        this.createAt = createAt;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
+        super.setCreatedAt(createAt);
     }
 
     public String getPayload() {

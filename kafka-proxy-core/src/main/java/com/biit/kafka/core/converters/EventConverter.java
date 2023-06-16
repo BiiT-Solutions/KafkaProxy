@@ -15,6 +15,9 @@ public class EventConverter extends ElementConverter<StringEvent, EventDTO, Even
     protected EventDTO convertElement(EventConverterRequest from) {
         final EventDTO eventDTO = new EventDTO();
         BeanUtils.copyProperties(from.getEntity(), eventDTO);
+        eventDTO.setMessageId(from.getEntity().getMessageId());
+        eventDTO.setSessionId(from.getEntity().getSessionId());
+        eventDTO.setCorrelationId(from.getEntity().getCorrelationId());
         return eventDTO;
     }
 
@@ -25,6 +28,9 @@ public class EventConverter extends ElementConverter<StringEvent, EventDTO, Even
         }
         final StringEvent event = new StringEvent();
         BeanUtils.copyProperties(to, event);
+        event.setMessageId(to.getMessageId());
+        event.setSessionId(to.getSessionId());
+        event.setCorrelationId(to.getCorrelationId());
         return event;
     }
 }
