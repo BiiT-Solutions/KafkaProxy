@@ -104,12 +104,12 @@ public class EventDTO extends CreatedElementDTO {
     }
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    public LocalDateTime getCreateAt() {
+    public LocalDateTime getCreatedAt() {
         return super.getCreatedAt();
     }
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    public void setCreateAt(LocalDateTime createAt) {
+    public void setCreatedAt(LocalDateTime createAt) {
         super.setCreatedAt(createAt);
     }
 
