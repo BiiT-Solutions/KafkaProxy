@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -43,10 +44,13 @@ public class EventServices extends SimpleServices<StringEvent, EventDTO, EventPr
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = "/topics/{topic}")
     public void send(
-            @Parameter(description = "Topic to be used. If not set will used the one defined in the 'applications.properties'.")
-            @PathVariable("topics") String topic,
+            @Parameter(description = "Topic to be used. If not set will used the one defined in the 'applications.properties' file.")
+            @PathVariable("topic") String topic,
+            @Parameter(name = "key", required = false) @RequestParam(value = "key", required = false) String key,
+            @Parameter(name = "partition", required = false) @RequestParam(value = "partition", required = false) Integer partition,
+            @Parameter(name = "timestamp", required = false) @RequestParam(value = "timestamp", required = false) Long timestamp,
             @RequestBody EventDTO dto, Authentication authentication, HttpServletRequest request) {
-        getController().create(dto, topic, authentication.getName());
+        getController().create(topic, key, partition, timestamp, dto, authentication.getName());
     }
 
     @PreAuthorize("hasAnyAuthority(@securityService.editorPrivilege, @securityService.adminPrivilege)")
@@ -54,10 +58,13 @@ public class EventServices extends SimpleServices<StringEvent, EventDTO, EventPr
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = "/topics/{topic}/all")
     public void sendAll(
-            @Parameter(description = "Topic to be used. If not set will used the one defined in the 'applications.properties'.")
-            @PathVariable("topics") String topic,
+            @Parameter(description = "Topic to be used. If not set will used the one defined in the 'applications.properties' file.")
+            @PathVariable("topic") String topic,
+            @Parameter(name = "key", required = false) @RequestParam(value = "key", required = false) String key,
+            @Parameter(name = "partition", required = false) @RequestParam(value = "partition", required = false) Integer partition,
+            @Parameter(name = "timestamp", required = false) @RequestParam(value = "timestamp", required = false) Long timestamp,
             @RequestBody Collection<EventDTO> dtos, Authentication authentication, HttpServletRequest request) {
-        getController().create(dtos, topic, authentication.getName());
+        getController().create(topic, key, partition, timestamp, dtos, authentication.getName());
     }
 
     @PreAuthorize("hasAnyAuthority(@securityService.viewerPrivilege, @securityService.editorPrivilege, @securityService.adminPrivilege)")

@@ -43,16 +43,34 @@ public class EventProvider {
         }
     }
 
+    /**
+     * Sends and event.
+     *
+     * @param topic     the topic to use. Optional and if not set, will be use the one set on 'application.properties'.
+     * @param key       the key of the message.
+     * @param partition the partition of the message. Can be null, but if set, requires a key with a valid value.
+     * @param timestamp the timestamp of the message. Can be null, but if set, requires a partition with a valid value.
+     * @param event     the event to send.
+     */
+    public void send(String topic, String key, Integer partition, long timestamp, StringEvent event) {
+        kafkaTemplate.send(topic, key, partition, timestamp, event);
+    }
+
     public void sendAll(Collection<StringEvent> events) {
         events.forEach(this::send);
     }
 
-    public void sendAll(String topic, Collection<StringEvent> events) {
-        if (topic == null || topic.isBlank()) {
-            sendAll(events);
-        } else {
-            events.forEach(event -> send(topic, event));
-        }
+    /**
+     * Sends a bunch of events.
+     *
+     * @param topic     the topic to use. Optional and if not set, will be use the one set on 'application.properties'.
+     * @param key       the key of the message.
+     * @param partition the partition of the message. Can be null, but if set, requires a key with a valid value.
+     * @param timestamp the timestamp of the message. Can be null, but if set, requires a partition with a valid value.
+     * @param events    the collection of events to sent.
+     */
+    public void sendAll(String topic, String key, Integer partition, long timestamp, Collection<StringEvent> events) {
+        events.forEach(event -> send(topic, key, partition, timestamp, event));
     }
 
     public Collection<StringEvent> get(Collection<String> topics, LocalDateTime startingTime, Duration duration) {

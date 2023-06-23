@@ -45,15 +45,16 @@ public class EventController extends SimpleController<StringEvent, EventDTO,
         return eventDTOS;
     }
 
-    public EventDTO create(EventDTO eventDTO, String topic, String creatorName) {
+    public EventDTO create(String topic, String key, Integer partition, long timestamp, EventDTO eventDTO, String creatorName) {
         eventDTO.setCreatedBy(creatorName);
-        getProvider().send(topic, reverse(eventDTO));
+        getProvider().send(topic, key, partition, timestamp, reverse(eventDTO));
         return eventDTO;
     }
 
-    public Collection<EventDTO> create(Collection<EventDTO> eventDTOS, String topic, String creatorName) {
+    public Collection<EventDTO> create(String topic, String key, Integer partition, long timestamp, Collection<EventDTO> eventDTOS,
+                                       String creatorName) {
         eventDTOS.forEach(eventDTO -> eventDTO.setCreatedBy(creatorName));
-        getProvider().sendAll(topic, reverseAll(eventDTOS));
+        getProvider().sendAll(topic, key, partition, timestamp, reverseAll(eventDTOS));
         return eventDTOS;
     }
 
