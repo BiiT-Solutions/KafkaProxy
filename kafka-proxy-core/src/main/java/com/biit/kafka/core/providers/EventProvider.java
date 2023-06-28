@@ -52,7 +52,7 @@ public class EventProvider {
      * @param timestamp the timestamp of the message. Can be null, but if set, requires a partition with a valid value.
      * @param event     the event to send.
      */
-    public void send(String topic, String key, Integer partition, long timestamp, Event event) {
+    public void send(String topic, String key, Integer partition, Long timestamp, Event event) {
         kafkaTemplate.send(topic, key, partition, timestamp, event);
     }
 

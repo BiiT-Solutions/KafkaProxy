@@ -50,7 +50,7 @@ public class EventController extends SimpleController<Event, EventDTO,
         return eventDTOS;
     }
 
-    public EventDTO create(String topic, String key, Integer partition, long timestamp, EventDTO eventDTO, String creatorName) {
+    public EventDTO create(String topic, String key, Integer partition, Long timestamp, EventDTO eventDTO, String creatorName) {
         eventDTO.setCreatedBy(creatorName);
         if (eventDTO.getCreatedAt() == null) {
             eventDTO.setCreatedAt(LocalDateTime.now());
