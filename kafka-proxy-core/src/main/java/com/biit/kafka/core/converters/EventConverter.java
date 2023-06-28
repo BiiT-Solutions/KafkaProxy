@@ -18,6 +18,7 @@ public class EventConverter extends ElementConverter<Event, EventDTO, EventConve
         eventDTO.setMessageId(from.getEntity().getMessageId());
         eventDTO.setSessionId(from.getEntity().getSessionId());
         eventDTO.setCorrelationId(from.getEntity().getCorrelationId());
+        eventDTO.setPayload(from.getEntity().getPayload());
         return eventDTO;
     }
 
@@ -31,6 +32,7 @@ public class EventConverter extends ElementConverter<Event, EventDTO, EventConve
         event.setMessageId(to.getMessageId());
         event.setSessionId(to.getSessionId());
         event.setCorrelationId(to.getCorrelationId());
+        event.setPayload(to.getPayload());
         return event;
     }
 }

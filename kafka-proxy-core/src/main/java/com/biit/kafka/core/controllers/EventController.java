@@ -32,6 +32,9 @@ public class EventController extends SimpleController<Event, EventDTO,
     @Override
     public EventDTO create(EventDTO eventDTO, String creatorName) {
         eventDTO.setCreatedBy(creatorName);
+        if (eventDTO.getCreatedAt() == null) {
+            eventDTO.setCreatedAt(LocalDateTime.now());
+        }
         validate(eventDTO);
         getProvider().send(reverse(eventDTO));
         return eventDTO;
