@@ -4,8 +4,8 @@ import com.biit.kafka.core.controllers.EventController;
 import com.biit.kafka.core.converters.EventConverter;
 import com.biit.kafka.core.converters.models.EventConverterRequest;
 import com.biit.kafka.core.models.EventDTO;
-import com.biit.kafka.core.models.StringEvent;
 import com.biit.kafka.core.providers.EventProvider;
+import com.biit.kafka.events.Event;
 import com.biit.server.rest.SimpleServices;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/events")
-public class EventServices extends SimpleServices<StringEvent, EventDTO, EventProvider, EventConverterRequest, EventConverter, EventController> {
+public class EventServices extends SimpleServices<Event, EventDTO, EventProvider, EventConverterRequest, EventConverter, EventController> {
 
     public EventServices(EventController controller) {
         super(controller);

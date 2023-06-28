@@ -1,10 +1,10 @@
 package com.biit.kafka.core.converters.models;
 
-import com.biit.kafka.core.models.StringEvent;
+import com.biit.kafka.events.Event;
 import com.biit.server.converters.models.ConverterRequest;
 
-public class EventConverterRequest extends ConverterRequest<StringEvent> {
-    public EventConverterRequest(StringEvent event) {
+public class EventConverterRequest extends ConverterRequest<Event> {
+    public EventConverterRequest(Event event) {
         super(event);
     }
 }

@@ -2,13 +2,13 @@ package com.biit.kafka.core.converters;
 
 import com.biit.kafka.core.converters.models.EventConverterRequest;
 import com.biit.kafka.core.models.EventDTO;
-import com.biit.kafka.core.models.StringEvent;
+import com.biit.kafka.events.Event;
 import com.biit.server.controller.converters.ElementConverter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EventConverter extends ElementConverter<StringEvent, EventDTO, EventConverterRequest> {
+public class EventConverter extends ElementConverter<Event, EventDTO, EventConverterRequest> {
 
 
     @Override
@@ -22,11 +22,11 @@ public class EventConverter extends ElementConverter<StringEvent, EventDTO, Even
     }
 
     @Override
-    public StringEvent reverse(EventDTO to) {
+    public Event reverse(EventDTO to) {
         if (to == null) {
             return null;
         }
-        final StringEvent event = new StringEvent();
+        final Event event = new Event();
         BeanUtils.copyProperties(to, event);
         event.setMessageId(to.getMessageId());
         event.setSessionId(to.getSessionId());

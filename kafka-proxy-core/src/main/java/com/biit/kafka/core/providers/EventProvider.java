@@ -1,7 +1,7 @@
 package com.biit.kafka.core.providers;
 
-import com.biit.kafka.core.consumers.HistoricalStringEventConsumer;
-import com.biit.kafka.core.models.StringEvent;
+import com.biit.kafka.consumers.HistoricalEventConsumer;
+import com.biit.kafka.events.Event;
 import com.biit.kafka.events.KafkaEventTemplate;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +14,11 @@ public class EventProvider {
 
     private final KafkaEventTemplate kafkaTemplate;
 
-    private final HistoricalStringEventConsumer historicalStringEventConsumer;
+    private final HistoricalEventConsumer historicalEventConsumer;
 
-    public EventProvider(KafkaEventTemplate kafkaTemplate, HistoricalStringEventConsumer historicalStringEventConsumer) {
+    public EventProvider(KafkaEventTemplate kafkaTemplate, HistoricalEventConsumer historicalEventConsumer) {
         this.kafkaTemplate = kafkaTemplate;
-        this.historicalStringEventConsumer = historicalStringEventConsumer;
+        this.historicalEventConsumer = historicalEventConsumer;
     }
 
     /**
@@ -26,7 +26,7 @@ public class EventProvider {
      *
      * @param event the event to send.
      */
-    public void send(StringEvent event) {
+    public void send(Event event) {
         kafkaTemplate.send(event);
     }
 
@@ -35,7 +35,7 @@ public class EventProvider {
      *
      * @param event the event to send.
      */
-    public void send(String topic, StringEvent event) {
+    public void send(String topic, Event event) {
         if (topic == null || topic.isBlank()) {
             send(event);
         } else {
@@ -52,11 +52,11 @@ public class EventProvider {
      * @param timestamp the timestamp of the message. Can be null, but if set, requires a partition with a valid value.
      * @param event     the event to send.
      */
-    public void send(String topic, String key, Integer partition, long timestamp, StringEvent event) {
+    public void send(String topic, String key, Integer partition, long timestamp, Event event) {
         kafkaTemplate.send(topic, key, partition, timestamp, event);
     }
 
-    public void sendAll(Collection<StringEvent> events) {
+    public void sendAll(Collection<Event> events) {
         events.forEach(this::send);
     }
 
@@ -69,15 +69,15 @@ public class EventProvider {
      * @param timestamp the timestamp of the message. Can be null, but if set, requires a partition with a valid value.
      * @param events    the collection of events to sent.
      */
-    public void sendAll(String topic, String key, Integer partition, long timestamp, Collection<StringEvent> events) {
+    public void sendAll(String topic, String key, Integer partition, long timestamp, Collection<Event> events) {
         events.forEach(event -> send(topic, key, partition, timestamp, event));
     }
 
-    public Collection<StringEvent> get(Collection<String> topics, LocalDateTime startingTime, Duration duration) {
+    public Collection<Event> get(Collection<String> topics, LocalDateTime startingTime, Duration duration) {
         if (topics == null || topics.isEmpty()) {
-            return historicalStringEventConsumer.getEvents(startingTime, duration);
+            return historicalEventConsumer.getEvents(startingTime, duration);
         } else {
-            return historicalStringEventConsumer.getEvents(topics, startingTime, duration);
+            return historicalEventConsumer.getEvents(topics, startingTime, duration);
         }
     }
 }

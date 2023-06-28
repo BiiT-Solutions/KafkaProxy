@@ -3,8 +3,8 @@ package com.biit.kafka.core.controllers;
 import com.biit.kafka.core.converters.EventConverter;
 import com.biit.kafka.core.converters.models.EventConverterRequest;
 import com.biit.kafka.core.models.EventDTO;
-import com.biit.kafka.core.models.StringEvent;
 import com.biit.kafka.core.providers.EventProvider;
+import com.biit.kafka.events.Event;
 import com.biit.server.controller.SimpleController;
 import com.biit.server.exceptions.ValidateBadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import java.util.Collection;
 import java.util.UUID;
 
 @Controller
-public class EventController extends SimpleController<StringEvent, EventDTO,
+public class EventController extends SimpleController<Event, EventDTO,
         EventProvider, EventConverterRequest, EventConverter> {
 
     @Autowired
@@ -25,7 +25,7 @@ public class EventController extends SimpleController<StringEvent, EventDTO,
     }
 
     @Override
-    protected EventConverterRequest createConverterRequest(StringEvent event) {
+    protected EventConverterRequest createConverterRequest(Event event) {
         return new EventConverterRequest(event);
     }
 
