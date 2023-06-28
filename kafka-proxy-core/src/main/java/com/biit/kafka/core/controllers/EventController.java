@@ -39,7 +39,12 @@ public class EventController extends SimpleController<Event, EventDTO,
 
     @Override
     public Collection<EventDTO> create(Collection<EventDTO> eventDTOS, String creatorName) {
-        eventDTOS.forEach(eventDTO -> eventDTO.setCreatedBy(creatorName));
+        eventDTOS.forEach(eventDTO -> {
+            eventDTO.setCreatedBy(creatorName);
+            if (eventDTO.getCreatedAt() == null) {
+                eventDTO.setCreatedAt(LocalDateTime.now());
+            }
+        });
         validate(eventDTOS);
         getProvider().sendAll(reverseAll(eventDTOS));
         return eventDTOS;
@@ -47,13 +52,21 @@ public class EventController extends SimpleController<Event, EventDTO,
 
     public EventDTO create(String topic, String key, Integer partition, long timestamp, EventDTO eventDTO, String creatorName) {
         eventDTO.setCreatedBy(creatorName);
+        if (eventDTO.getCreatedAt() == null) {
+            eventDTO.setCreatedAt(LocalDateTime.now());
+        }
         getProvider().send(topic, key, partition, timestamp, reverse(eventDTO));
         return eventDTO;
     }
 
     public Collection<EventDTO> create(String topic, String key, Integer partition, long timestamp, Collection<EventDTO> eventDTOS,
                                        String creatorName) {
-        eventDTOS.forEach(eventDTO -> eventDTO.setCreatedBy(creatorName));
+        eventDTOS.forEach(eventDTO -> {
+            eventDTO.setCreatedBy(creatorName);
+            if (eventDTO.getCreatedAt() == null) {
+                eventDTO.setCreatedAt(LocalDateTime.now());
+            }
+        });
         getProvider().sendAll(topic, key, partition, timestamp, reverseAll(eventDTOS));
         return eventDTOS;
     }
