@@ -12,11 +12,11 @@ import java.util.Collection;
 @Service
 public class EventProvider {
 
-    private final KafkaEventTemplate<String, StringEvent> kafkaTemplate;
+    private final KafkaEventTemplate kafkaTemplate;
 
     private final HistoricalStringEventConsumer historicalStringEventConsumer;
 
-    public EventProvider(KafkaEventTemplate<String, StringEvent> kafkaTemplate, HistoricalStringEventConsumer historicalStringEventConsumer) {
+    public EventProvider(KafkaEventTemplate kafkaTemplate, HistoricalStringEventConsumer historicalStringEventConsumer) {
         this.kafkaTemplate = kafkaTemplate;
         this.historicalStringEventConsumer = historicalStringEventConsumer;
     }
