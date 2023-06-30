@@ -32,9 +32,6 @@ public class EventController extends SimpleController<Event, EventDTO,
     @Override
     public EventDTO create(EventDTO eventDTO, String creatorName) {
         eventDTO.setCreatedBy(creatorName);
-        if (eventDTO.getCreatedAt() == null) {
-            eventDTO.setCreatedAt(LocalDateTime.now());
-        }
         validate(eventDTO);
         getProvider().send(reverse(eventDTO));
         return eventDTO;
@@ -44,9 +41,6 @@ public class EventController extends SimpleController<Event, EventDTO,
     public Collection<EventDTO> create(Collection<EventDTO> eventDTOS, String creatorName) {
         eventDTOS.forEach(eventDTO -> {
             eventDTO.setCreatedBy(creatorName);
-            if (eventDTO.getCreatedAt() == null) {
-                eventDTO.setCreatedAt(LocalDateTime.now());
-            }
         });
         validate(eventDTOS);
         getProvider().sendAll(reverseAll(eventDTOS));
@@ -55,21 +49,15 @@ public class EventController extends SimpleController<Event, EventDTO,
 
     public EventDTO create(String topic, String key, Integer partition, Long timestamp, EventDTO eventDTO, String creatorName) {
         eventDTO.setCreatedBy(creatorName);
-        if (eventDTO.getCreatedAt() == null) {
-            eventDTO.setCreatedAt(LocalDateTime.now());
-        }
+        validate(eventDTO);
         getProvider().send(topic, key, partition, timestamp, reverse(eventDTO));
         return eventDTO;
     }
 
     public Collection<EventDTO> create(String topic, String key, Integer partition, long timestamp, Collection<EventDTO> eventDTOS,
                                        String creatorName) {
-        eventDTOS.forEach(eventDTO -> {
-            eventDTO.setCreatedBy(creatorName);
-            if (eventDTO.getCreatedAt() == null) {
-                eventDTO.setCreatedAt(LocalDateTime.now());
-            }
-        });
+        eventDTOS.forEach(eventDTO -> eventDTO.setCreatedBy(creatorName));
+        validate(eventDTOS);
         getProvider().sendAll(topic, key, partition, timestamp, reverseAll(eventDTOS));
         return eventDTOS;
     }
@@ -82,6 +70,9 @@ public class EventController extends SimpleController<Event, EventDTO,
     public void validate(EventDTO eventDTO) throws ValidateBadRequestException {
         if (eventDTO.getMessageId() == null) {
             eventDTO.setMessageId(UUID.randomUUID());
+        }
+        if (eventDTO.getCreatedAt() == null) {
+            eventDTO.setCreatedAt(LocalDateTime.now());
         }
     }
 }

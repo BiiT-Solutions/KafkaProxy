@@ -7,6 +7,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.UUID;
 
 public class EventDTO extends CreatedElementDTO {
@@ -30,6 +31,8 @@ public class EventDTO extends CreatedElementDTO {
     private String contentType;
 
     private Object payload;
+
+    private Map<String, String> customProperties;
 
     public String getId() {
         return id;
@@ -119,5 +122,13 @@ public class EventDTO extends CreatedElementDTO {
 
     public void setPayload(Object payload) {
         this.payload = payload;
+    }
+
+    public Map<String, String> getCustomProperties() {
+        return customProperties;
+    }
+
+    public void setCustomProperties(Map<String, String> customProperties) {
+        this.customProperties = customProperties;
     }
 }
