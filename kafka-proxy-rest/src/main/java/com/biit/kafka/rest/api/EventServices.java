@@ -72,9 +72,9 @@ public class EventServices extends SimpleServices<Event, EventDTO, EventProvider
     @GetMapping(value = "/topics/{topics}/startingTime/{startingTime}/duration/{duration}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Collection<EventDTO> get(
             @Parameter(description = "Topics to be used. If not set will used the one defined in the 'applications.properties'.")
-            @PathVariable("topics") @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss") Collection<String> topics,
+            @PathVariable("topics") Collection<String> topics,
             @Parameter(description = "The search starting range (format: yyyy-MM-dd hh:mm:ss).", required = true)
-            @PathVariable("startingTime") LocalDateTime startingTime,
+            @PathVariable("startingTime") @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss") LocalDateTime startingTime,
             @Parameter(description = "Total duration of the range in seconds. If not set, the range will be considered until now.")
             @PathVariable("duration") Long duration,
             Authentication authentication, HttpServletRequest request) {
