@@ -8,7 +8,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EventConverter extends ElementConverter<Event, EventDTO, EventConverterRequest> {
+public class ElementEventConverter extends ElementConverter<Event, EventDTO, EventConverterRequest> {
 
 
     @Override

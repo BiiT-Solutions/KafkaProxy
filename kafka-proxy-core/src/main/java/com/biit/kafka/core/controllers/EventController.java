@@ -2,7 +2,7 @@ package com.biit.kafka.core.controllers;
 
 import com.biit.kafka.controllers.models.EventDTO;
 import com.biit.kafka.converters.models.EventConverterRequest;
-import com.biit.kafka.core.converters.EventConverter;
+import com.biit.kafka.core.converters.ElementEventConverter;
 import com.biit.kafka.core.providers.EventProvider;
 import com.biit.kafka.events.Event;
 import com.biit.server.controller.SimpleController;
@@ -17,10 +17,10 @@ import java.util.UUID;
 
 @Controller
 public class EventController extends SimpleController<Event, EventDTO,
-        EventProvider, EventConverterRequest, EventConverter> {
+        EventProvider, EventConverterRequest, ElementEventConverter> {
 
     @Autowired
-    protected EventController(EventProvider provider, EventConverter converter) {
+    protected EventController(EventProvider provider, ElementEventConverter converter) {
         super(provider, converter);
     }
 

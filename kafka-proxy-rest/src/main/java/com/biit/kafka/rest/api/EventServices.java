@@ -2,7 +2,7 @@ package com.biit.kafka.rest.api;
 
 import com.biit.kafka.controllers.models.EventDTO;
 import com.biit.kafka.core.controllers.EventController;
-import com.biit.kafka.core.converters.EventConverter;
+import com.biit.kafka.core.converters.ElementEventConverter;
 import com.biit.kafka.converters.models.EventConverterRequest;
 import com.biit.kafka.core.providers.EventProvider;
 import com.biit.kafka.events.Event;
@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/events")
-public class EventServices extends SimpleServices<Event, EventDTO, EventProvider, EventConverterRequest, EventConverter, EventController> {
+public class EventServices extends SimpleServices<Event, EventDTO, EventProvider, EventConverterRequest, ElementEventConverter, EventController> {
 
     public EventServices(EventController controller) {
         super(controller);
