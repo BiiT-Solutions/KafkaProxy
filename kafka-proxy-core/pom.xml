@@ -31,7 +31,7 @@
         </dependency>
         <dependency>
             <groupId>com.biit</groupId>
-            <artifactId>kafka-client</artifactId>
+            <artifactId>kafka-client-dto</artifactId>
         </dependency>
 
         <!--Testing-->

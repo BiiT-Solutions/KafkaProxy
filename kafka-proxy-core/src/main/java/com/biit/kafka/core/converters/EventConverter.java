@@ -1,7 +1,7 @@
 package com.biit.kafka.core.converters;
 
-import com.biit.kafka.core.converters.models.EventConverterRequest;
-import com.biit.kafka.core.models.EventDTO;
+import com.biit.kafka.controllers.models.EventDTO;
+import com.biit.kafka.converters.models.EventConverterRequest;
 import com.biit.kafka.events.Event;
 import com.biit.server.controller.converters.ElementConverter;
 import org.springframework.beans.BeanUtils;

@@ -1,8 +1,8 @@
 package com.biit.kafka.core.controllers;
 
+import com.biit.kafka.controllers.models.EventDTO;
+import com.biit.kafka.converters.models.EventConverterRequest;
 import com.biit.kafka.core.converters.EventConverter;
-import com.biit.kafka.core.converters.models.EventConverterRequest;
-import com.biit.kafka.core.models.EventDTO;
 import com.biit.kafka.core.providers.EventProvider;
 import com.biit.kafka.events.Event;
 import com.biit.server.controller.SimpleController;
