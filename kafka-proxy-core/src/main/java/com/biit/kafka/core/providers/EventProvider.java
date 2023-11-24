@@ -3,10 +3,12 @@ package com.biit.kafka.core.providers;
 import com.biit.kafka.consumers.HistoricalEventConsumer;
 import com.biit.kafka.events.Event;
 import com.biit.kafka.events.KafkaEventTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Service
@@ -16,7 +18,8 @@ public class EventProvider {
 
     private final HistoricalEventConsumer historicalEventConsumer;
 
-    public EventProvider(KafkaEventTemplate kafkaTemplate, HistoricalEventConsumer historicalEventConsumer) {
+    public EventProvider(@Autowired(required = false) KafkaEventTemplate kafkaTemplate,
+                         @Autowired(required = false) HistoricalEventConsumer historicalEventConsumer) {
         this.kafkaTemplate = kafkaTemplate;
         this.historicalEventConsumer = historicalEventConsumer;
     }
@@ -27,7 +30,9 @@ public class EventProvider {
      * @param event the event to send.
      */
     public void send(Event event) {
-        kafkaTemplate.send(event);
+        if (kafkaTemplate != null) {
+            kafkaTemplate.send(event);
+        }
     }
 
     /**
@@ -39,7 +44,9 @@ public class EventProvider {
         if (topic == null || topic.isBlank()) {
             send(event);
         } else {
-            kafkaTemplate.send(topic, event);
+            if (kafkaTemplate != null) {
+                kafkaTemplate.send(topic, event);
+            }
         }
     }
 
@@ -53,7 +60,9 @@ public class EventProvider {
      * @param event     the event to send.
      */
     public void send(String topic, String key, Integer partition, Long timestamp, Event event) {
-        kafkaTemplate.send(topic, key, partition, timestamp, event);
+        if (kafkaTemplate != null) {
+            kafkaTemplate.send(topic, key, partition, timestamp, event);
+        }
     }
 
     public void sendAll(Collection<Event> events) {
@@ -74,10 +83,13 @@ public class EventProvider {
     }
 
     public Collection<Event> get(Collection<String> topics, LocalDateTime startingTime, Duration duration) {
-        if (topics == null || topics.isEmpty()) {
-            return historicalEventConsumer.getEvents(startingTime, duration);
-        } else {
-            return historicalEventConsumer.getEvents(topics, startingTime, duration);
+        if (historicalEventConsumer != null) {
+            if (topics == null || topics.isEmpty()) {
+                return historicalEventConsumer.getEvents(startingTime, duration);
+            } else {
+                return historicalEventConsumer.getEvents(topics, startingTime, duration);
+            }
         }
+        return new ArrayList<>();
     }
 }
