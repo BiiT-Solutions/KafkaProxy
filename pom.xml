@@ -4,7 +4,7 @@
     <artifactId>kafka-proxy</artifactId>
     <name>Kafka Proxy</name>
     <groupId>com.biit.kafka</groupId>
-    <version>1.78-SNAPSHOT</version>
+    <version>1.81-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <parent>
