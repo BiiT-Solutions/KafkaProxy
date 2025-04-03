@@ -37,8 +37,6 @@ jobs:
           repositories: '[{ "id": "central", "url": "https://artifactory.biit-solutions.com/artifactory/libs-release" }]'
           plugin_repositories: '[{ "id": "central", "url": "https://artifactory.biit-solutions.com/artifactory/libs-release" }]'
           servers: '[{ "id": "central", "username": "${{ vars.ARTIFACTORY_USER }}", "password": "${{ vars.ARTIFACTORY_TOKEN }}" }]'
-      - name: Install Chromedriver
-        uses: nanasess/setup-chromedriver@v2
       - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
