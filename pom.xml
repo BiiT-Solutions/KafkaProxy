@@ -4,7 +4,7 @@
     <artifactId>kafka-proxy</artifactId>
     <name>Kafka Proxy</name>
     <groupId>com.biit.kafka</groupId>
-    <version>1.2.4</version>
+    <version>1.2.5-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <parent>
@@ -22,7 +22,7 @@
     <scm>
         <connection>scm:git:git.biit-solutions.com:Java/KafkaProxy.git</connection>
         <developerConnection>scm:git:git.biit-solutions.com:Java/KafkaProxy.git</developerConnection>
-        <tag>kafka-proxy-1.2.4</tag>
+        <tag>Kafka Proxy</tag>
     </scm>
 
     <distributionManagement>
