@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -49,7 +50,7 @@ public class EventServices extends SimpleServices<Event, EventDTO, EventProvider
             @Parameter(name = "key", required = false) @RequestParam(value = "key", required = false) String key,
             @Parameter(name = "partition", required = false) @RequestParam(value = "partition", required = false) Integer partition,
             @Parameter(name = "timestamp", required = false) @RequestParam(value = "timestamp", required = false) Long timestamp,
-            @RequestBody EventDTO dto, Authentication authentication, HttpServletRequest request) {
+            @Valid @RequestBody EventDTO dto, Authentication authentication, HttpServletRequest request) {
         getController().create(topic, key, partition, timestamp, dto, authentication.getName());
     }
 
@@ -63,7 +64,7 @@ public class EventServices extends SimpleServices<Event, EventDTO, EventProvider
             @Parameter(name = "key", required = false) @RequestParam(value = "key", required = false) String key,
             @Parameter(name = "partition", required = false) @RequestParam(value = "partition", required = false) Integer partition,
             @Parameter(name = "timestamp", required = false) @RequestParam(value = "timestamp", required = false) Long timestamp,
-            @RequestBody Collection<EventDTO> dtos, Authentication authentication, HttpServletRequest request) {
+            @Valid @RequestBody Collection<EventDTO> dtos, Authentication authentication, HttpServletRequest request) {
         getController().create(topic, key, partition, timestamp, dtos, authentication.getName());
     }
 
