@@ -1,12 +1,14 @@
 package com.biit.kafka.rest.api;
 
 import com.biit.kafka.controllers.models.EventDTO;
+import com.biit.kafka.converters.models.EventConverterRequest;
 import com.biit.kafka.core.controllers.EventController;
 import com.biit.kafka.core.converters.ElementEventConverter;
-import com.biit.kafka.converters.models.EventConverterRequest;
 import com.biit.kafka.core.providers.EventProvider;
 import com.biit.kafka.events.Event;
 import com.biit.server.rest.SimpleServices;
+import com.biit.server.security.IUserOrganizationProvider;
+import com.biit.server.security.model.IUserOrganization;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -30,42 +32,54 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/events")
 public class EventServices extends SimpleServices<Event, EventDTO, EventProvider, EventConverterRequest, ElementEventConverter, EventController> {
 
-    public EventServices(EventController controller) {
+    private final KafkaProxySecurityService securityService;
+    private final List<IUserOrganizationProvider<? extends IUserOrganization>> userOrganizationProviders;
+
+    public EventServices(EventController controller, KafkaProxySecurityService securityService,
+                         List<IUserOrganizationProvider<? extends IUserOrganization>> userOrganizationProviders) {
         super(controller);
+        this.securityService = securityService;
+        this.userOrganizationProviders = userOrganizationProviders;
     }
 
     @PreAuthorize("hasAnyAuthority(@securityService.editorPrivilege, @securityService.adminPrivilege)")
     @Operation(summary = "Sends an event.", security = @SecurityRequirement(name = "bearerAuth"))
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = "/topics/{topic}")
-    public void send(
+    public EventDTO send(
             @Parameter(description = "Topic to be used. If not set will used the one defined in the 'applications.properties' file.")
             @PathVariable("topic") String topic,
             @Parameter(name = "key", required = false) @RequestParam(value = "key", required = false) String key,
             @Parameter(name = "partition", required = false) @RequestParam(value = "partition", required = false) Integer partition,
             @Parameter(name = "timestamp", required = false) @RequestParam(value = "timestamp", required = false) Long timestamp,
             @Valid @RequestBody EventDTO dto, Authentication authentication, HttpServletRequest request) {
-        getController().create(topic, key, partition, timestamp, dto, authentication.getName());
+        securityService.checkCreatedOn(dto, authentication, userOrganizationProviders.get(0),
+                securityService.getEditorPrivilege(), securityService.getAdminPrivilege());
+        return getController().create(topic, key, partition, timestamp, dto, authentication.getName());
     }
 
     @PreAuthorize("hasAnyAuthority(@securityService.editorPrivilege, @securityService.adminPrivilege)")
     @Operation(summary = "Sends a collection of events.", security = @SecurityRequirement(name = "bearerAuth"))
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = "/topics/{topic}/all")
-    public void sendAll(
+    public Collection<EventDTO> sendAll(
             @Parameter(description = "Topic to be used. If not set will used the one defined in the 'applications.properties' file.")
             @PathVariable("topic") String topic,
             @Parameter(name = "key", required = false) @RequestParam(value = "key", required = false) String key,
             @Parameter(name = "partition", required = false) @RequestParam(value = "partition", required = false) Integer partition,
             @Parameter(name = "timestamp", required = false) @RequestParam(value = "timestamp", required = false) Long timestamp,
             @Valid @RequestBody Collection<EventDTO> dtos, Authentication authentication, HttpServletRequest request) {
-        getController().create(topic, key, partition, timestamp, dtos, authentication.getName());
+        dtos.forEach(dto ->
+                securityService.checkCreatedOn(dto, authentication, userOrganizationProviders.get(0),
+                        securityService.getEditorPrivilege(), securityService.getAdminPrivilege()));
+        return getController().create(topic, key, partition, timestamp, dtos, authentication.getName());
     }
 
     @PreAuthorize("hasAnyAuthority(@securityService.viewerPrivilege, @securityService.editorPrivilege, @securityService.adminPrivilege)")

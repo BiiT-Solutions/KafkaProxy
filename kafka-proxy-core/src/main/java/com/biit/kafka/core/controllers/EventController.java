@@ -5,32 +5,23 @@ import com.biit.kafka.converters.models.EventConverterRequest;
 import com.biit.kafka.core.converters.ElementEventConverter;
 import com.biit.kafka.core.providers.EventProvider;
 import com.biit.kafka.events.Event;
-import com.biit.kafka.logger.KafkaProxyLogger;
 import com.biit.server.controller.SimpleController;
 import com.biit.server.exceptions.ValidateBadRequestException;
-import com.biit.server.security.IUserOrganizationProvider;
-import com.biit.server.security.model.IUserOrganization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 @Controller
 public class EventController extends SimpleController<Event, EventDTO,
         EventProvider, EventConverterRequest, ElementEventConverter> {
 
-    private final List<IUserOrganizationProvider<? extends IUserOrganization>> userOrganizationProviders;
-
     @Autowired
-    protected EventController(EventProvider provider, ElementEventConverter converter,
-                              List<IUserOrganizationProvider<? extends IUserOrganization>> userOrganizationProviders) {
+    protected EventController(EventProvider provider, ElementEventConverter converter) {
         super(provider, converter);
-        this.userOrganizationProviders = userOrganizationProviders;
     }
 
     @Override
@@ -48,17 +39,6 @@ public class EventController extends SimpleController<Event, EventDTO,
 
     private void populateEvent(EventDTO eventDTO, String creatorName) {
         eventDTO.setCreatedBy(creatorName);
-        if (!userOrganizationProviders.isEmpty()) {
-            final Collection<? extends IUserOrganization> organizations = userOrganizationProviders.get(0).findByUsername(creatorName);
-            if (!organizations.isEmpty()) {
-                final String organizationName = organizations.iterator().next().getName();
-                if (eventDTO.getOrganization() != null && !Objects.equals(eventDTO.getOrganization(), organizationName)) {
-                    KafkaProxyLogger.warning(this.getClass(), "Chaging event organization from '{}' to '{}'.",
-                            eventDTO.getOrganization(), organizationName);
-                }
-                eventDTO.setOrganization(organizationName);
-            }
-        }
     }
 
     @Override
