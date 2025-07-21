@@ -38,7 +38,7 @@ public class EventController extends SimpleController<Event, EventDTO,
 
     @Override
     public EventDTO create(EventDTO eventDTO, String creatorName) {
-        eventDTO.setCreatedBy(creatorName);
+        populateEvent(eventDTO, creatorName);
         validate(eventDTO);
         getProvider().send(reverse(eventDTO));
         return eventDTO;
@@ -46,7 +46,7 @@ public class EventController extends SimpleController<Event, EventDTO,
 
     private void populateEvent(EventDTO eventDTO, String creatorName) {
         eventDTO.setCreatedBy(creatorName);
-        if (eventDTO.getOrganization() == null && !userOrganizationProviders.isEmpty()) {
+        if (!userOrganizationProviders.isEmpty()) {
             final Collection<? extends IUserOrganization> organizations = userOrganizationProviders.get(0).findByUsername(creatorName);
             if (!organizations.isEmpty()) {
                 eventDTO.setOrganization(organizations.iterator().next().getName());
@@ -73,7 +73,7 @@ public class EventController extends SimpleController<Event, EventDTO,
 
     public Collection<EventDTO> create(String topic, String key, Integer partition, long timestamp, Collection<EventDTO> eventDTOS,
                                        String creatorName) {
-        eventDTOS.forEach(eventDTO -> eventDTO.setCreatedBy(creatorName));
+        eventDTOS.forEach(eventDTO -> populateEvent(eventDTO, creatorName));
         validate(eventDTOS);
         getProvider().sendAll(topic, key, partition, timestamp, reverseAll(eventDTOS));
         return eventDTOS;
