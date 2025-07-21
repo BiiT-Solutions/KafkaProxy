@@ -5,6 +5,7 @@ import com.biit.kafka.converters.models.EventConverterRequest;
 import com.biit.kafka.core.converters.ElementEventConverter;
 import com.biit.kafka.core.providers.EventProvider;
 import com.biit.kafka.events.Event;
+import com.biit.kafka.logger.KafkaProxyLogger;
 import com.biit.server.controller.SimpleController;
 import com.biit.server.exceptions.ValidateBadRequestException;
 import com.biit.server.security.IUserOrganizationProvider;
@@ -16,6 +17,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Controller
@@ -49,7 +51,12 @@ public class EventController extends SimpleController<Event, EventDTO,
         if (!userOrganizationProviders.isEmpty()) {
             final Collection<? extends IUserOrganization> organizations = userOrganizationProviders.get(0).findByUsername(creatorName);
             if (!organizations.isEmpty()) {
-                eventDTO.setOrganization(organizations.iterator().next().getName());
+                final String organizationName = organizations.iterator().next().getName();
+                if (eventDTO.getOrganization() != null && !Objects.equals(eventDTO.getOrganization(), organizationName)) {
+                    KafkaProxyLogger.warning(this.getClass(), "Chaging event organization from '{}' to '{}'.",
+                            eventDTO.getOrganization(), organizationName);
+                }
+                eventDTO.setOrganization(organizationName);
             }
         }
     }
