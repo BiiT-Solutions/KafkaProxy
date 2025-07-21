@@ -7,8 +7,6 @@ import com.biit.kafka.core.converters.ElementEventConverter;
 import com.biit.kafka.core.providers.EventProvider;
 import com.biit.kafka.events.Event;
 import com.biit.server.rest.SimpleServices;
-import com.biit.server.security.IUserOrganizationProvider;
-import com.biit.server.security.model.IUserOrganization;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -32,7 +30,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @RestController
@@ -40,13 +37,10 @@ import java.util.concurrent.TimeUnit;
 public class EventServices extends SimpleServices<Event, EventDTO, EventProvider, EventConverterRequest, ElementEventConverter, EventController> {
 
     private final KafkaProxySecurityService securityService;
-    private final List<IUserOrganizationProvider<? extends IUserOrganization>> userOrganizationProviders;
 
-    public EventServices(EventController controller, KafkaProxySecurityService securityService,
-                         List<IUserOrganizationProvider<? extends IUserOrganization>> userOrganizationProviders) {
+    public EventServices(EventController controller, KafkaProxySecurityService securityService) {
         super(controller);
         this.securityService = securityService;
-        this.userOrganizationProviders = userOrganizationProviders;
     }
 
     @PreAuthorize("hasAnyAuthority(@securityService.editorPrivilege, @securityService.adminPrivilege)")
@@ -60,8 +54,7 @@ public class EventServices extends SimpleServices<Event, EventDTO, EventProvider
             @Parameter(name = "partition", required = false) @RequestParam(value = "partition", required = false) Integer partition,
             @Parameter(name = "timestamp", required = false) @RequestParam(value = "timestamp", required = false) Long timestamp,
             @Valid @RequestBody EventDTO dto, Authentication authentication, HttpServletRequest request) {
-        securityService.checkCreatedOn(dto, authentication, userOrganizationProviders.get(0),
-                securityService.getEditorPrivilege(), securityService.getAdminPrivilege());
+        securityService.checkCreatedOn(dto, authentication, securityService.getEditorPrivilege(), securityService.getAdminPrivilege());
         return getController().create(topic, key, partition, timestamp, dto, authentication.getName());
     }
 
@@ -77,7 +70,7 @@ public class EventServices extends SimpleServices<Event, EventDTO, EventProvider
             @Parameter(name = "timestamp", required = false) @RequestParam(value = "timestamp", required = false) Long timestamp,
             @Valid @RequestBody Collection<EventDTO> dtos, Authentication authentication, HttpServletRequest request) {
         dtos.forEach(dto ->
-                securityService.checkCreatedOn(dto, authentication, userOrganizationProviders.get(0),
+                securityService.checkCreatedOn(dto, authentication,
                         securityService.getEditorPrivilege(), securityService.getAdminPrivilege()));
         return getController().create(topic, key, partition, timestamp, dtos, authentication.getName());
     }
