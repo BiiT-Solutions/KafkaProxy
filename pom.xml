@@ -4,7 +4,7 @@
     <artifactId>kafka-proxy</artifactId>
     <name>Kafka Proxy</name>
     <groupId>com.biit-solutions.kafka</groupId>
-    <version>1.2.19</version>
+    <version>1.2.20-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <parent>
@@ -36,7 +36,7 @@
         <connection>scm:git:ssh://git@github.com/BiiT-Solutions/KafkaProxy.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/BiiT-Solutions/KafkaProxy.git</developerConnection>
         <url>https://github.com/BiiT-Solutions/KafkaProxy.git</url>
-        <tag>kafka-proxy-1.2.19</tag>
+        <tag>Kafka Proxy</tag>
     </scm>
 
     <distributionManagement>
