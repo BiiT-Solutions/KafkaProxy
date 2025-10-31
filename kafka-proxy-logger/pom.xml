@@ -7,7 +7,7 @@
 
     <parent>
         <artifactId>kafka-proxy</artifactId>
-        <groupId>com.biit.kafka</groupId>
+        <groupId>com.biit-solutions.kafka</groupId>
         <version>1.2.19-SNAPSHOT</version>
     </parent>
 
